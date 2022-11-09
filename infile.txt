@@ -1,0 +1,5 @@
+to-do-list
+
+setar variavel de ambiente
+lidar com os comandos
+criar a parte de execução 
