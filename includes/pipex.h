@@ -6,7 +6,7 @@
 /*   By: sde-cama <sde-cama@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:23:11 by sde-cama          #+#    #+#             */
-/*   Updated: 2022/11/09 11:03:05 by sde-cama         ###   ########.fr       */
+/*   Updated: 2022/11/13 10:30:20 by sde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,19 +47,24 @@ typedef enum e_error
 	INFILE_ERROR,
 	OUTFILE_ERROR,
 	PIPE_FAIL,
-	FORK_FAIL
+	FORK_FAIL,
+	CMD_FAIL
 }	t_error;
 
 typedef struct s_pipex
 {
-	int	infile;
-	int	outfile;
-	int	pipe_fd[2];
-	char **env;
+	int		infile;
+	int		outfile;
+	int		pipe_fd[2];
+	char	**env;
+	char	**cmd;
 }	t_pipex;
 
-int	handle_arguments(int argc, char **argv, char **envp, t_pipex *pipex)
+int	main(int argc, char **argv, char **envp);
+int	handle_arguments(int argc, char **argv, t_pipex *pipex);
 int	arg_error(t_error error_type);
 int pipex_error(t_error error_type);
+int cmd_error(t_error error_type, char *cmd);
+
 
 #endif

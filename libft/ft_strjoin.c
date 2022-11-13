@@ -6,18 +6,18 @@
 /*   By: sde-cama <sde-cama@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/17 15:51:07 by sde-cama          #+#    #+#             */
-/*   Updated: 2022/10/12 20:37:35 by sde-cama         ###   ########.fr       */
+/*   Updated: 2022/11/13 11:42:23 by sde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char *ft_strjoin(char *s1, char *s2)
 {
-	char	*full_str;
-	size_t	size_s1;
-	size_t	size_s2;
-	int		i;
+	char *full_str;
+	size_t size_s1;
+	size_t size_s2;
+	int i;
 
 	i = 0;
 	size_s1 = ft_strlen(s1);

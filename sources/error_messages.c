@@ -6,7 +6,7 @@
 /*   By: sde-cama <sde-cama@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 13:08:09 by sde-cama          #+#    #+#             */
-/*   Updated: 2022/11/09 10:20:19 by sde-cama         ###   ########.fr       */
+/*   Updated: 2022/11/13 10:43:08 by sde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,21 @@ int arg_error(t_error error_type)
 
 int pipex_error(t_error error_type)
 {
-	char *message;
-
-	message = "Undefined";
 	if (error_type == PIPE_FAIL)
-		message = "Pipe fail. Could not pipe files.\n";
+		perror(RED "Pipe fail. Could not pipe files.\n" RESET);
 	else if (error_type == FORK_FAIL)
-		message = "Fork fail. Could not fork.\n";
-	ft_printf(RED "Error\n%s" RESET, message);
+		perror(RED "Fork fail. Could not fork.\n" RESET);
+	return (FAIL);
+}
+
+int cmd_error(t_error error_type, char *cmd)
+{
+	if (error_type == CMD_FAIL)
+	{	
+		perror(RED "Command not found: \n" RESET);
+		ft_putendl_fd(cmd, 2);
+	}
+	else
+		perror(RED "Could not execute cmd\n" RESET);
 	return (FAIL);
 }

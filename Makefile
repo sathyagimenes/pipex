@@ -7,7 +7,7 @@ CFLAGS	= -Wall -Werror -Wextra -g3
 
 SRCS = ./sources/main.c			\
 	./sources/error_messages.c	\
-	./sources/validate_args.c	\
+	./sources/validations.c	\
 
 OBJS	= $(SRCS:%.c=%.o)
 
