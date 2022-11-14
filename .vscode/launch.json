@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "/home/sathya/42/pipex/projeto/pipex",
-            "args": ["/home/sathya/42/pipex/projeto/infile.txt", "\"ls -l\"", "\"wc -l\"", "outfile"],
+            // "args": ["/home/sathya/42/pipex/projeto/infile.txt", "\"ls -l\"", "\"wc -l\"", "outfile"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],

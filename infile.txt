@@ -1,5 +1,14 @@
 to-do-list
 
-setar variavel de ambiente
-lidar com os comandos
-criar a parte de execução 
+verificar pq não lê variavel de ambiente
+valgrind
+verificar pq ele cria o outfile e lugares/pastas diferentes
+rodar e passar nos testerfa-spinchecar funções
+checar o wait
+
+Checar:
+- The program takes 4 arguments, no more, no less (except for bonus part)
+and only in the required order.
+- Error management is correct: (un)existing files, files rights,
+(un)existing command binary, and so forth.
+- checar awk command
