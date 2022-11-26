@@ -22,6 +22,9 @@ $(NAME):	${LIB} $(OBJS)
 ${LIB}:
 			make -C libft
 
+run:	$(NAME)
+		./pipex infile.txt "ls -l" "wc -l" outfile
+
 clean:
 			$(MAKE) clean -C $(LIBFT_PATH)
 			rm -f $(OBJS)

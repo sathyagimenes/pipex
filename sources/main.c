@@ -6,7 +6,7 @@
 /*   By: sde-cama <sde-cama@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:21:12 by sde-cama          #+#    #+#             */
-/*   Updated: 2022/11/13 23:49:40 by sde-cama         ###   ########.fr       */
+/*   Updated: 2022/11/26 09:25:58 by sde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,12 @@ void	exec_command(char *cmd, char **envp);
 char	*find_path(char *cmd, char **env);
 char	*swap_space_arg(char *command, char *what_change, char *to_swap);
 char	**replace_in_matriz(char **matriz, char *what_change, char *to_swap);
+void	free_mem(char	**mem);
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	pipex;
+	int status;
 	int		pid;
 
 	if (!handle_arguments(argc, argv, &pipex))
@@ -42,6 +44,12 @@ int	main(int argc, char **argv, char **envp)
 	if (pid != 0)
 	{
 		// wait(NULL);//verificar isso aqui... talvez esse: waitpid(pid, NULL, 0);
+		waitpid(pid, &status, WNOHANG);
+		if (WEXITSTATUS(status) == 127)
+		{
+			write(2, "Falha na execução do child\n", 27);//checar se mantem isso
+			exit(127);
+		}
 		parent_execution(argv, envp, &pipex);
 	}
 	return (SUCCESS);
@@ -49,17 +57,19 @@ int	main(int argc, char **argv, char **envp)
 
 void	child_execution(char **argv, char **envp, t_pipex *pipex)
 {
-	close(pipex->pipe_fd[0]);
 	dup2(pipex->infile, 0);
 	dup2(pipex->pipe_fd[1], 1);
+	close(pipex->pipe_fd[0]);
+	close(pipex->pipe_fd[1]);
 	exec_command(argv[2], envp);
 }
 
 void	parent_execution(char **argv, char **envp, t_pipex *pipex)
 {
-	close(pipex->pipe_fd[1]);
 	dup2(pipex->outfile, 1);
 	dup2(pipex->pipe_fd[0], 0);
+	close(pipex->pipe_fd[1]);
+	close(pipex->pipe_fd[0]);
 	exec_command(argv[3], envp);
 }
 
@@ -110,15 +120,28 @@ char	*find_path(char *cmd, char **env)
 			free(full_path);
 			if (access(cmd_line, F_OK) == 0)
 			{
-				free(paths);
+				free_mem(paths);
 				return (cmd_line);
 			}
 			free(cmd_line);
 			i++;
 		}
 	}
-	free(paths);
+	free_mem(paths);
 	return (cmd);
+}
+
+void	free_mem(char	**mem)
+{
+	int	i;
+
+	i = 0;
+	while (mem[i])
+	{
+		free(mem[i]);
+		i++;
+	}
+	free(mem);
 }
 
 char	*swap_space_arg(char *command, char *what_change, char *to_swap)//rever isso

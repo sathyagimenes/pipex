@@ -1,9 +1,9 @@
 to-do-list
 
+retornar o status code das execuções
 verificar pq não lê variavel de ambiente
-valgrind
 verificar pq ele cria o outfile e lugares/pastas diferentes
-rodar e passar nos testerfa-spinchecar funções
+rodar e passar nos tester
 checar o wait
 
 Checar:
