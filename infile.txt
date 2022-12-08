@@ -1,10 +1,13 @@
 to-do-list
 
+arrumar erros do tester
 retornar o status code das execuções
 verificar pq não lê variavel de ambiente
-verificar pq ele cria o outfile e lugares/pastas diferentes
+verificar pq ele cria o outfile em lugares/pastas diferentes
 rodar e passar nos tester
 checar o wait
+
+verificar erro consertado do teste 6 do PIPEXaminator x PipexTester: cria o não cria o outfile antes de dar erro? > verificar original
 
 Checar:
 - The program takes 4 arguments, no more, no less (except for bonus part)

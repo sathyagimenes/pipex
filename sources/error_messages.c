@@ -6,48 +6,69 @@
 /*   By: sde-cama <sde-cama@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 13:08:09 by sde-cama          #+#    #+#             */
-/*   Updated: 2022/11/13 21:26:28 by sde-cama         ###   ########.fr       */
+/*   Updated: 2022/12/07 18:30:08 by sde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int arg_error(t_error error_type)
+void arg_error(t_error error_type, int error_code)
 {
 	char *message;
-	char *valid_example;
 
 	message = "Undefined\n";
 	if (error_type == ARGUMENT_ERROR)
-		message = "Invalid quantity of arguments.\n";
+		message = "Incorrect arguments. Run in following format: ./pipex "
+				  "file_in \"cmd flags\" \"cmd flags\" file_out";
 	else if (error_type == INFILE_ERROR)
 		message = "Invalid infile. Could not open infile.\n";
 	else if (error_type == OUTFILE_ERROR)
 		message = "Invalid outfile. Could not open or create outfile.\n";
-	valid_example = "Valid example: ./pipex infile \"ls -l\" \"wc -l\" outfile\n";
-	ft_printf(RED "Error\n%s%s" RESET, message, valid_example);
-	return (0);
+	ft_putendl_fd(message, STDERR_FILENO);
+	exit(error_code);
 }
 
 int pipex_error(t_error error_type)
 {
 	if (error_type == PIPE_FAIL)
-		perror(RED "Pipe fail. Could not pipe files.\n" RESET);
+		perror("Pipe fail. Could not pipe files.\n");
 	else if (error_type == FORK_FAIL)
-		perror(RED "Fork fail. Could not fork.\n" RESET);
+		perror("Fork fail. Could not fork.\n");
 	return (0);
 }
 
 int cmd_error(t_error error_type, char *cmd)
 {
 	if (error_type == CMD_FAIL)
-	{	
+	{
 		write(2, cmd, ft_strlen(cmd));
 		write(2, ": comando não encontrado\n", 27);
 	}
 	else
 	{
-		perror(RED "Could not execute cmd\n" RESET);
+		perror("Could not execute cmd\n");
 	}
 	return (0);
+}
+
+// xxxx
+void exit_msg(char *msg, int error_code)
+{
+	ft_putendl_fd(msg, STDERR_FILENO);
+	exit(error_code);
+}
+
+int error_msg(char *msg, int error_code)
+{
+	ft_putendl_fd(msg, STDERR_FILENO);
+	return (error_code);
+}
+
+int double_error_msg(char *msg, char *name, int error_code)
+{
+	ft_putstr_fd(name, STDERR_FILENO);
+	write(2, ": ", 2);
+	ft_putendl_fd(msg, STDERR_FILENO);
+	// exit(error_code);
+	return (error_code);
 }

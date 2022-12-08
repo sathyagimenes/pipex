@@ -6,7 +6,7 @@
 /*   By: sde-cama <sde-cama@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:21:12 by sde-cama          #+#    #+#             */
-/*   Updated: 2022/11/26 09:25:58 by sde-cama         ###   ########.fr       */
+/*   Updated: 2022/12/07 23:18:02 by sde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,16 @@ int	main(int argc, char **argv, char **envp)
 	t_pipex	pipex;
 	int status;
 	int		pid;
+	// int ret;
+
+	// ret = 1;
 
 	if (!handle_arguments(argc, argv, &pipex))
-		exit(0);
+		exit(1);
+	// handle_arguments(argc, argv, &pipex);
+	// ret = handle_arguments(argc, argv, &pipex);
+	// if (ret == 0)
+	// 	return(ret);
 	if (pipe(pipex.pipe_fd) == -1)
 	{
 		pipex_error(PIPE_FAIL);
@@ -52,7 +59,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 		parent_execution(argv, envp, &pipex);
 	}
-	return (SUCCESS);
+	return (0);
 }
 
 void	child_execution(char **argv, char **envp, t_pipex *pipex)
@@ -61,6 +68,8 @@ void	child_execution(char **argv, char **envp, t_pipex *pipex)
 	dup2(pipex->pipe_fd[1], 1);
 	close(pipex->pipe_fd[0]);
 	close(pipex->pipe_fd[1]);
+	close(pipex->infile);
+	close(pipex->outfile);
 	exec_command(argv[2], envp);
 }
 
@@ -70,6 +79,8 @@ void	parent_execution(char **argv, char **envp, t_pipex *pipex)
 	dup2(pipex->pipe_fd[0], 0);
 	close(pipex->pipe_fd[1]);
 	close(pipex->pipe_fd[0]);
+	close(pipex->infile);
+	close(pipex->outfile);
 	exec_command(argv[3], envp);
 }
 
@@ -81,15 +92,16 @@ void	exec_command(char *cmd, char **envp)
 	if (ft_strnstr(cmd, " ' '", ft_strlen(cmd)))
 		cmd = swap_space_arg(cmd, " ' '", " 0x0");
 	cmd_args = ft_split(cmd, ' ');
+	if (cmd_args == NULL)
+		exit(double_error_msg(strerror(errno), "Error when parsing the command: ", 1));
 	cmd_args = replace_in_matriz(cmd_args, "0x0", "  ");
 	// cmd_args = ft_split(cmd, ' ');
 	path = find_path(cmd_args[0], envp);
 	if (execve(path, cmd_args, envp) == -1)
 	{
 		cmd_error(CMD_FAIL, cmd_args[0]);
-		free(cmd_args);
-		free(path);
-		exit(127);//checar codigo
+		free_mem(cmd_args);
+		exit(127);
 	}
 }
 

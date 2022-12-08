@@ -6,7 +6,7 @@
 /*   By: sde-cama <sde-cama@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:23:11 by sde-cama          #+#    #+#             */
-/*   Updated: 2022/11/13 10:30:20 by sde-cama         ###   ########.fr       */
+/*   Updated: 2022/12/07 18:27:26 by sde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define PIPEX_H
 
 # include <libft.h>
+
+# include <errno.h>
 
 /* to write, read, close, access, pipe, dup, dup2, execve, fork */
 # include <unistd.h>
@@ -38,9 +40,6 @@
 # define FAIL -1
 # define SUCCESS 1
 
-# define RED "\x1b[38;5;1m"
-# define RESET "\x1b[0m"
-
 typedef enum e_error
 {
 	ARGUMENT_ERROR,
@@ -62,9 +61,11 @@ typedef struct s_pipex
 
 int	main(int argc, char **argv, char **envp);
 int	handle_arguments(int argc, char **argv, t_pipex *pipex);
-int	arg_error(t_error error_type);
+void	arg_error(t_error error_type, int error_code);
 int pipex_error(t_error error_type);
 int cmd_error(t_error error_type, char *cmd);
-
+void	exit_msg(char *msg, int error_code);
+int	error_msg(char *msg, int error_code);
+int	double_error_msg(char *msg, char *name, int error_code);
 
 #endif
