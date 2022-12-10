@@ -6,7 +6,7 @@
 /*   By: sde-cama <sde-cama@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:23:11 by sde-cama          #+#    #+#             */
-/*   Updated: 2022/12/07 18:27:26 by sde-cama         ###   ########.fr       */
+/*   Updated: 2022/12/10 11:35:03 by sde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,8 @@ typedef struct s_pipex
 
 int	main(int argc, char **argv, char **envp);
 int	handle_arguments(int argc, char **argv, t_pipex *pipex);
-void	arg_error(t_error error_type, int error_code);
-int pipex_error(t_error error_type);
-int cmd_error(t_error error_type, char *cmd);
-void	exit_msg(char *msg, int error_code);
+int cmd_error(char *cmd);
 int	error_msg(char *msg, int error_code);
-int	double_error_msg(char *msg, char *name, int error_code);
+int	double_error_msg(char *msg, char *name);
 
 #endif

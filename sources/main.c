@@ -6,7 +6,7 @@
 /*   By: sde-cama <sde-cama@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:21:12 by sde-cama          #+#    #+#             */
-/*   Updated: 2022/12/10 09:14:00 by sde-cama         ###   ########.fr       */
+/*   Updated: 2022/12/10 11:36:22 by sde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,26 +29,17 @@ int main(int argc, char **argv, char **envp)
 	if (!handle_arguments(argc, argv, &pipex))
 		exit(0);
 	if (pipe(pipex.pipe_fd) == -1)
-	{
-		pipex_error(PIPE_FAIL);
-		exit(FAIL);
-	}
+		error_msg("Pipe fail. Could not pipe files.", 1);
 	pid = fork();
 	if (pid == -1)
-	{
-		pipex_error(FORK_FAIL);
-		exit(FAIL);
-	}
+		error_msg("Fork fail. Could not fork.", 1);
 	if (pid == 0)
 		child_execution(argv, envp, &pipex);
 	if (pid != 0)
 	{
 		waitpid(pid, &status, WNOHANG);
 		if (WEXITSTATUS(status) == 127)
-		{
-			write(2, "Falha na execução do child\n", 27); // checar se mantem isso
-			exit(127);
-		}
+			error_msg(strerror(errno), 127);
 		parent_execution(argv, envp, &pipex);
 	}
 	return (0);
@@ -85,12 +76,12 @@ void exec_command(char *cmd, char **envp)
 		cmd = swap_space_arg(cmd, " ' '", " 0x0");
 	cmd_args = ft_split(cmd, ' ');
 	if (cmd_args == NULL)
-		exit(double_error_msg(strerror(errno), "Error when parsing the command: ", 1));
+		error_msg(strerror(errno), 1);
 	cmd_args = replace_in_matriz(cmd_args, "0x0", "  ");
 	path = find_path(cmd_args[0], envp);
 	if (execve(path, cmd_args, envp) == -1)
 	{
-		cmd_error(CMD_FAIL, cmd_args[0]);
+		double_error_msg("comando não encontrado", cmd_args[0]);
 		free_mem(cmd_args);
 		exit(127);
 	}
