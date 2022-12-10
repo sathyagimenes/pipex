@@ -6,7 +6,7 @@
 /*   By: sde-cama <sde-cama@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 13:08:09 by sde-cama          #+#    #+#             */
-/*   Updated: 2022/12/07 18:30:08 by sde-cama         ###   ########.fr       */
+/*   Updated: 2022/12/09 11:36:22 by sde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ int cmd_error(t_error error_type, char *cmd)
 	return (0);
 }
 
-// xxxx
 void exit_msg(char *msg, int error_code)
 {
 	ft_putendl_fd(msg, STDERR_FILENO);
@@ -69,6 +68,5 @@ int double_error_msg(char *msg, char *name, int error_code)
 	ft_putstr_fd(name, STDERR_FILENO);
 	write(2, ": ", 2);
 	ft_putendl_fd(msg, STDERR_FILENO);
-	// exit(error_code);
 	return (error_code);
 }

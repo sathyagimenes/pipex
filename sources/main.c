@@ -6,35 +6,28 @@
 /*   By: sde-cama <sde-cama@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:21:12 by sde-cama          #+#    #+#             */
-/*   Updated: 2022/12/07 23:18:02 by sde-cama         ###   ########.fr       */
+/*   Updated: 2022/12/10 09:14:00 by sde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	child_execution(char **argv, char **envp, t_pipex *pipex);
-void	parent_execution(char **argv, char **envp, t_pipex *pipex);
-void	exec_command(char *cmd, char **envp);
-char	*find_path(char *cmd, char **env);
-char	*swap_space_arg(char *command, char *what_change, char *to_swap);
-char	**replace_in_matriz(char **matriz, char *what_change, char *to_swap);
-void	free_mem(char	**mem);
+void child_execution(char **argv, char **envp, t_pipex *pipex);
+void parent_execution(char **argv, char **envp, t_pipex *pipex);
+void exec_command(char *cmd, char **envp);
+char *find_path(char *cmd, char **env);
+char *swap_space_arg(char *command, char *what_change, char *to_swap);
+char **replace_in_matriz(char **matriz, char *what_change, char *to_swap);
+void free_mem(char **mem);
 
-int	main(int argc, char **argv, char **envp)
+int main(int argc, char **argv, char **envp)
 {
-	t_pipex	pipex;
+	t_pipex pipex;
 	int status;
-	int		pid;
-	// int ret;
-
-	// ret = 1;
+	int pid;
 
 	if (!handle_arguments(argc, argv, &pipex))
-		exit(1);
-	// handle_arguments(argc, argv, &pipex);
-	// ret = handle_arguments(argc, argv, &pipex);
-	// if (ret == 0)
-	// 	return(ret);
+		exit(0);
 	if (pipe(pipex.pipe_fd) == -1)
 	{
 		pipex_error(PIPE_FAIL);
@@ -50,11 +43,10 @@ int	main(int argc, char **argv, char **envp)
 		child_execution(argv, envp, &pipex);
 	if (pid != 0)
 	{
-		// wait(NULL);//verificar isso aqui... talvez esse: waitpid(pid, NULL, 0);
 		waitpid(pid, &status, WNOHANG);
 		if (WEXITSTATUS(status) == 127)
 		{
-			write(2, "Falha na execução do child\n", 27);//checar se mantem isso
+			write(2, "Falha na execução do child\n", 27); // checar se mantem isso
 			exit(127);
 		}
 		parent_execution(argv, envp, &pipex);
@@ -62,7 +54,7 @@ int	main(int argc, char **argv, char **envp)
 	return (0);
 }
 
-void	child_execution(char **argv, char **envp, t_pipex *pipex)
+void child_execution(char **argv, char **envp, t_pipex *pipex)
 {
 	dup2(pipex->infile, 0);
 	dup2(pipex->pipe_fd[1], 1);
@@ -73,7 +65,7 @@ void	child_execution(char **argv, char **envp, t_pipex *pipex)
 	exec_command(argv[2], envp);
 }
 
-void	parent_execution(char **argv, char **envp, t_pipex *pipex)
+void parent_execution(char **argv, char **envp, t_pipex *pipex)
 {
 	dup2(pipex->outfile, 1);
 	dup2(pipex->pipe_fd[0], 0);
@@ -84,10 +76,10 @@ void	parent_execution(char **argv, char **envp, t_pipex *pipex)
 	exec_command(argv[3], envp);
 }
 
-void	exec_command(char *cmd, char **envp)
+void exec_command(char *cmd, char **envp)
 {
-	char	**cmd_args;
-	char	*path;
+	char **cmd_args;
+	char *path;
 
 	if (ft_strnstr(cmd, " ' '", ft_strlen(cmd)))
 		cmd = swap_space_arg(cmd, " ' '", " 0x0");
@@ -95,7 +87,6 @@ void	exec_command(char *cmd, char **envp)
 	if (cmd_args == NULL)
 		exit(double_error_msg(strerror(errno), "Error when parsing the command: ", 1));
 	cmd_args = replace_in_matriz(cmd_args, "0x0", "  ");
-	// cmd_args = ft_split(cmd, ' ');
 	path = find_path(cmd_args[0], envp);
 	if (execve(path, cmd_args, envp) == -1)
 	{
@@ -105,13 +96,13 @@ void	exec_command(char *cmd, char **envp)
 	}
 }
 
-char	*find_path(char *cmd, char **env)
+char *find_path(char *cmd, char **env)
 {
-	char	*env_path;
-	char	**paths;
-	char	*cmd_line;
-	char	*full_path;
-	int		i;
+	char *env_path;
+	char **paths;
+	char *cmd_line;
+	char *full_path;
+	int i;
 
 	if (cmd[0] == '/' || cmd[0] == '.')
 		return (cmd);
@@ -143,9 +134,9 @@ char	*find_path(char *cmd, char **env)
 	return (cmd);
 }
 
-void	free_mem(char	**mem)
+void free_mem(char **mem)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (mem[i])
@@ -156,11 +147,11 @@ void	free_mem(char	**mem)
 	free(mem);
 }
 
-char	*swap_space_arg(char *command, char *what_change, char *to_swap)//rever isso
+char *swap_space_arg(char *command, char *what_change, char *to_swap) // rever isso
 {
-	int	c;
-	int	w;
-	int	aux;
+	int c;
+	int w;
+	int aux;
 
 	c = 0;
 	w = 0;
@@ -178,9 +169,9 @@ char	*swap_space_arg(char *command, char *what_change, char *to_swap)//rever iss
 	return (command);
 }
 
-char	**replace_in_matriz(char **matriz, char *what_change, char *to_swap)//rever isso
+char **replace_in_matriz(char **matriz, char *what_change, char *to_swap) // rever isso
 {
-	int	i;
+	int i;
 
 	i = 1;
 	while (matriz[i])
