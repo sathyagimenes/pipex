@@ -37,8 +37,10 @@ run:	$(NAME)
 $(BONUS_NAME):	${LIB} ${BONUS_OBJS}
 				$(CC) $(CFLAGS) $(BONUS_OBJS) -o $@ -L $(LIBFT_PATH) -I $(INCLUDES_PATH) -I $(LIBFT_PATH) -lft
 
-bonus: $(BONUS_NAME) ${LIB} $(BONUS_OBJS)
-			$(CC) $(CFLAGS) $(OBJS) -o $@ -L $(LIBFT_PATH) -I $(INCLUDES_PATH) -I $(LIBFT_PATH) -lft
+bonus: $(BONUS_NAME)
+
+run_bonus:	$(BONUS_NAME)
+			./pipex_bonus here_doc eof "tr -d 'a'" "tr -d 'r'" "tr -d 'e'" outfile
 
 clean:
 			$(MAKE) clean -C $(LIBFT_PATH)

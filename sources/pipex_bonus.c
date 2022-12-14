@@ -1,6 +1,6 @@
 // colocar header
 
-#include "pipex_bonus.h"
+#include "pipex.h"
 
 int	open_file(char *file, int in_or_out)
 {
