@@ -6,7 +6,7 @@
 /*   By: sde-cama <sde-cama@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:23:11 by sde-cama          #+#    #+#             */
-/*   Updated: 2022/12/14 08:45:46 by sde-cama         ###   ########.fr       */
+/*   Updated: 2022/12/14 10:55:31 by sde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,19 +60,17 @@ typedef struct s_pipex
 	char *limiter;
 } t_pipex;
 
+
 int		main(int argc, char **argv, char **envp);
 int		handle_arguments(int argc, char **argv, t_pipex *pipex);
 int		cmd_error(char *cmd);
 int		error_msg(char *msg, int error_code);
 int		double_error_msg(char *msg, char *name);
-void	child_execution(char *cmd, char **envp, t_pipex *pipex);
-void	parent_execution(char *cmd, char **envp, t_pipex *pipex);
-void	exec_command(char *cmd, char **envp);
 char	*find_path(char *cmd, char **env);
 char	*swap_space_arg(char *command, char *what_change, char *to_swap);
 char	**replace_in_matriz(char **matriz, char *what_change, char *to_swap);
 void	free_mem(char **mem);
 char	*find_path(char *cmd, char **env);
-char	*get_next_line(int fd);
+char	*get_next_line(int fd, char *limitter);
 
 #endif

@@ -79,7 +79,6 @@ char **replace_in_matriz(char **matriz, char *what_change, char *to_swap) // rev
 	return (matriz);
 }
 
-
 void free_mem(char **mem)
 {
 	int i;
