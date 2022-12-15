@@ -1,13 +1,16 @@
 to-do-list
 
-arrumar erros do tester
-retornar o status code das execuções
-verificar pq não lê variavel de ambiente
-verificar pq ele cria o outfile em lugares/pastas diferentes
-rodar e passar nos tester
-checar o wait
 
-verificar erro consertado do teste 6 do PIPEXaminator x PipexTester: cria ou não cria o outfile antes de dar erro? > verificar original
+verificar quando são dois comandos inexistente: refletir se vai arrumar (o segundo imprime antes do priemiro - wait?)
+checar o wait
+verificar se bonus lê variavel de ambiente
+verificar valgrind no mandatorio e no bonus
+descobrir bo do bonus. pq chama o here_doc em execução sem ele
+
+"e ae glr, como seis fizeram pra verificar se o pipex de vocês estava tendo memory leak ou não?
+Pra deixar um pouco mais clara a minha pergunta, toda a vez que eu rodo o pipex com o valgrind ele não dá sinal nenhum de que verificou a memoria usada pelo programa, o que eu acho que é por conta do execve mudar pra outro processo e o valgrind perde o pipex. Sendo assim, como ter certeza de que o programa tá livre de leak?
+
+EDIT: eu consegui usando o fsanitize"
 
 Checar:
 - The program takes 4 arguments, no more, no less (except for bonus part)

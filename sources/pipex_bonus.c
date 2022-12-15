@@ -15,12 +15,12 @@ int main(int argc, char **argv, char **envp)
 	int		fd_out;
 
 	if (argc < 5)
-		error_msg("Incorrect arguments. Run in following format: ./pipex "
+		error_msg("Incorrect arguments. Run in following format: ./pipex_bonus "
 				"file_in \"cmd flags\" \"cmd flags\" file_out", 1);	
 	if (ft_strncmp(argv[1], "here_doc", ft_strlen(argv[1])) == 0 && ft_strlen(argv[1]) == 8)
 	{
 		if (argc < 6)
-			error_msg("Incorrect arguments. Run in following format: ./pipex "
+			error_msg("Incorrect arguments. Run in following format: ./pipex_bonus "
 				"here_doc limitter \"cmd flags\" \"cmd flags\" file_out", 1);	
 		i = 3;
 		fd_out = open_file(argv[argc - 1], 2);
@@ -33,6 +33,8 @@ int main(int argc, char **argv, char **envp)
 		fd_out = open_file(argv[argc - 1], 1);
 		dup2(fd_in, 0);
 	}
+	if (fd_in < 0 || fd_out < 0)
+		exit(0);
 	while (i < argc - 2)
 		do_pipe(argv[i++], envp);
 	dup2(fd_out, 1);
@@ -40,30 +42,18 @@ int main(int argc, char **argv, char **envp)
 	return(0);
 }
 
-static int	open_file(char *file, int in_or_out)
+static int open_file(char *file, int in_or_out)
 {
-	int	ret;
+	int ret;
 
 	if (in_or_out == 0)
-	{
 		ret = open(file, O_RDONLY);
-		if (ret < 0)
-			return (double_error_msg(strerror(errno), file));
-	}
 	if (in_or_out == 1)
-	{
 		ret = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (ret < 0)
-			return (double_error_msg(strerror(errno), file));
-	}
 	if (in_or_out == 2)
-	{
 		ret = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (ret < 0)
-			return (double_error_msg(strerror(errno), file));
-	}
-	if (ret == -1)
-		exit(0);
+	if (ret < 0)
+		return (double_error_msg(strerror(errno), file));
 	return (ret);
 }
 

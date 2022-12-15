@@ -6,7 +6,7 @@
 /*   By: sde-cama <sde-cama@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:21:12 by sde-cama          #+#    #+#             */
-/*   Updated: 2022/12/14 08:51:55 by sde-cama         ###   ########.fr       */
+/*   Updated: 2022/12/15 09:10:58 by sde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	main(int argc, char **argv, char **envp)
 	int status;
 	int pid;
 
-	if (!handle_arguments(argc, argv, &pipex))
+	if (handle_arguments(argc, argv, &pipex) < 0)
 		exit(0);
 	if (pipe(pipex.pipe_fd) == -1)
 		error_msg("Pipe fail. Could not pipe files.", 1);
