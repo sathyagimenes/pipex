@@ -6,7 +6,7 @@
 /*   By: sde-cama <sde-cama@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:23:11 by sde-cama          #+#    #+#             */
-/*   Updated: 2022/12/14 11:25:07 by sde-cama         ###   ########.fr       */
+/*   Updated: 2022/12/21 11:51:49 by sde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,9 @@ int		cmd_error(char *cmd);
 int		error_msg(char *msg, int error_code);
 int		double_error_msg(char *msg, char *name);
 char	*find_path(char *cmd, char **env);
-char	*swap_space_arg(char *command, char *what_change, char *to_swap);
-char	**replace_in_matriz(char **matriz, char *what_change, char *to_swap);
+// char	*swap_space_arg(char *command, char *what_change, char *to_swap);
+// char	**replace_in_matriz(char **matriz, char *what_change, char *to_swap);
+char	**split_cmd(char *cmd);
 void	free_mem(char **mem);
 char	*find_path(char *cmd, char **env);
 char	*get_next_line(int fd, char *limitter);

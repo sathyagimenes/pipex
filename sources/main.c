@@ -6,7 +6,7 @@
 /*   By: sde-cama <sde-cama@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:21:12 by sde-cama          #+#    #+#             */
-/*   Updated: 2022/12/15 09:10:58 by sde-cama         ###   ########.fr       */
+/*   Updated: 2022/12/21 11:49:26 by sde-cama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,13 @@ static void	exec_command(char *cmd, char **envp)
 	char **cmd_args;
 	char *path;
 
-	if (ft_strnstr(cmd, " ' '", ft_strlen(cmd)))
-		cmd = swap_space_arg(cmd, " ' '", " 0x0");
-	cmd_args = ft_split(cmd, ' ');
-	if (cmd_args == NULL)
-		error_msg(strerror(errno), 1);
-	cmd_args = replace_in_matriz(cmd_args, "0x0", "  ");
+	// if (ft_strnstr(cmd, " ' '", ft_strlen(cmd)))
+	// 	cmd = swap_space_arg(cmd, " ' '", " 0x0");
+	// cmd_args = ft_split(cmd, ' ');
+	// if (cmd_args == NULL)
+	// 	error_msg(strerror(errno), 1);
+	// cmd_args = replace_in_matriz(cmd_args, "0x0", "' '");
+	cmd_args = split_cmd(cmd);
 	path = find_path(cmd_args[0], envp);
 	if (execve(path, cmd_args, envp) == -1)
 	{

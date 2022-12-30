@@ -1,16 +1,21 @@
 to-do-list
 
+procura aspas simples ou duplas, 
+guarda token (comando) e substitui por algo x
+dá o split dos comandos
 
 verificar quando são dois comandos inexistente: refletir se vai arrumar (o segundo imprime antes do priemiro - wait?)
 checar o wait
-verificar se bonus lê variavel de ambiente
-verificar valgrind no mandatorio e no bonus
-descobrir bo do bonus. pq chama o here_doc em execução sem ele
+verificar valgrind no mandatorio e no bonus > está dando leak???
 
-"e ae glr, como seis fizeram pra verificar se o pipex de vocês estava tendo memory leak ou não?
-Pra deixar um pouco mais clara a minha pergunta, toda a vez que eu rodo o pipex com o valgrind ele não dá sinal nenhum de que verificou a memoria usada pelo programa, o que eu acho que é por conta do execve mudar pra outro processo e o valgrind perde o pipex. Sendo assim, como ter certeza de que o programa tá livre de leak?
+usar lexer
+arrumar tr de substuituição do ' '
+arrumar awk: ./pipex test.txt "cat" "awk '{print \$1}'" outfile 
+para o awk eu preciso retirar as aspas
+< in.txt cat | awk '{print $1}' > outfile
+Esse funciona: ./pipex file1.txt "cat" "awk {print\$1}" outfile
 
-EDIT: eu consegui usando o fsanitize"
+valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --track-fds=yes ./pipex file1.txt "cat" "wc -w" out
 
 Checar:
 - The program takes 4 arguments, no more, no less (except for bonus part)

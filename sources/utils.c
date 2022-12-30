@@ -1,6 +1,68 @@
-//colocar header
+// colocar header
 
 #include "pipex.h"
+
+char **split_cmd(char *cmd)
+{
+	// char	*new_cmd;
+	char **flags;
+	char **cmd_parsed;
+	int i;
+	int j;
+	int k;
+
+	i = 0;
+	k = 0;
+	// flags = ft_calloc();
+	flags = ft_calloc(sizeof(char *), 5);
+	while (cmd[k])
+	{
+		// new_cmd = ft_strnstr(cmd, "'", ft_strlen(cmd));
+		if (cmd[k] == '\'') // adicionar para aspas duplas tbm"
+		{
+			j = 0;
+			k++;
+			while (cmd[k + j] != '\'' && cmd[k + j])
+			{
+				if (j == 0)
+					flags[i] = ft_calloc(sizeof(char), 10); // alterar tamanho
+				flags[i][j] = cmd[k + j];
+				cmd[k + j] = 'x';
+				j++;
+			}
+			if (cmd[k + j] != '\'')
+				ft_printf("missing end of quoting");
+			i++;
+			k += j;
+		}
+		k++;
+	}
+	flags[i] = '\0';
+	i = 0;
+	k = 0;
+	cmd_parsed = ft_split(cmd, ' ');
+	while (cmd_parsed[i])
+	{
+		if (cmd_parsed[i][0] == '\'')
+		{
+			j = 1;
+			while (cmd_parsed[i][j] == 'x')
+			{
+				cmd_parsed[i][j] = flags[k][j - 1];
+				j++;
+				if (cmd_parsed[i][j] == '\'')
+					k++;
+			}
+			if (cmd_parsed[i][1] == '{' && cmd_parsed[i][j - 1] == '}')
+			{
+				cmd_parsed[i][0] = ' ';
+				cmd_parsed[i][j] = ' ';
+			}
+		}
+		i++;
+	}
+	return (cmd_parsed);
+}
 
 char *find_path(char *cmd, char **env)
 {
@@ -40,44 +102,44 @@ char *find_path(char *cmd, char **env)
 	return (cmd);
 }
 
-char *swap_space_arg(char *command, char *what_change, char *to_swap) // rever isso
-{
-	int c;
-	int w;
-	int aux;
+// char *swap_space_arg(char *command, char *what_change, char *to_swap)
+// {
+// 	int c;
+// 	int w;
+// 	int aux;
 
-	c = 0;
-	w = 0;
-	aux = 0;
-	while (command[c] != '\0')
-	{
-		while (command[c + w] == what_change[w])
-		{
-			command[c + w] = to_swap[aux];
-			w++;
-			aux++;
-		}
-		c++;
-	}
-	return (command);
-}
+// 	c = 0;
+// 	w = 0;
+// 	aux = 0;
+// 	while (command[c] != '\0')
+// 	{
+// 		while (command[c + w] == what_change[w])
+// 		{
+// 			command[c + w] = to_swap[aux];
+// 			w++;
+// 			aux++;
+// 		}
+// 		c++;
+// 	}
+// 	return (command);
+// }
 
-char **replace_in_matriz(char **matriz, char *what_change, char *to_swap) // rever isso
-{
-	int i;
+// char **replace_in_matriz(char **matriz, char *what_change, char *to_swap)
+// {
+// 	int i;
 
-	i = 1;
-	while (matriz[i])
-	{
-		if (ft_strnstr(matriz[i], what_change, ft_strlen(matriz[i])))
-		{
-			free(matriz[i]);
-			matriz[i] = ft_strdup(to_swap);
-		}
-		i++;
-	}
-	return (matriz);
-}
+// 	i = 1;
+// 	while (matriz[i])
+// 	{
+// 		if (ft_strnstr(matriz[i], what_change, ft_strlen(matriz[i])))
+// 		{
+// 			free(matriz[i]);
+// 			matriz[i] = ft_strdup(to_swap);
+// 		}
+// 		i++;
+// 	}
+// 	return (matriz);
+// }
 
 void free_mem(char **mem)
 {

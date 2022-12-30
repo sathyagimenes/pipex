@@ -9,8 +9,8 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "/home/sathya/42/pipex/projeto/pipex",
-            "args": ["here_doc", "eof", "\"ls -l\"", "\"wc -l\"", "outfile"],
-            // "args": ["/home/sathya/42/pipex/projeto/file1.txt", "\"ls -l\"", "\"wc -l\"", "outfile"],
+            // "args": ["here_doc", "eof", "\"ls -l\"", "\"wc -l\"", "outfile"],
+            "args": ["/home/sathya/42/pipex/projeto/file1.txt", "\"cat\"", "\"tr -d ' '\"", "outfile"],
             // "args": [ "/home/sathya/42/pipex/projeto/pipex-tester/assets/deepthought.txt", "grep Now", "exit 5", "/home/sathya/42/pipex/projeto/pipex-tester/outs/test-$num.txt"],
             // /home/sathya/42/pipex/projeto/pipex-tester/assets/deepthought.txt "grep Now" "exit 5" /home/sathya/42/pipex/projeto/pipex-tester/outs/test-$num.txt
             "stopAtEntry": false,
