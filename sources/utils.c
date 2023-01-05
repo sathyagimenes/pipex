@@ -2,66 +2,79 @@
 
 #include "pipex.h"
 
+char *tokenization(char *cmd, t_token *token);
+void revert_token(t_token *token);
+
 char **split_cmd(char *cmd)
 {
-	// char	*new_cmd;
-	char **flags;
-	char **cmd_parsed;
-	int i;
-	int j;
-	int k;
+	t_token token;
 
-	i = 0;
-	k = 0;
-	// flags = ft_calloc();
-	flags = ft_calloc(sizeof(char *), 5);
-	while (cmd[k])
+	cmd = tokenization(cmd, &token);
+	token.splited_cmd = ft_split(cmd, ' ');
+	if (token.splited_cmd == NULL)
+		error_msg(strerror(errno), 1);
+	revert_token(&token);
+	free_mem(token.flags);
+	return (token.cmd_parsed);
+}
+
+char *tokenization(char *cmd, t_token *token)
+{
+	token->i = 0;
+	token->k = 0;
+	token->flags = ft_calloc(sizeof(char *), 5);
+	while (cmd[token->k])
 	{
-		// new_cmd = ft_strnstr(cmd, "'", ft_strlen(cmd));
-		if (cmd[k] == '\'') // adicionar para aspas duplas tbm"
+		if (cmd[token->k] == '\'')
 		{
-			j = 0;
-			k++;
-			while (cmd[k + j] != '\'' && cmd[k + j])
+			token->j = 0;
+			token->k++;
+			while (cmd[token->k + token->j] != '\'' && cmd[token->k + token->j])
 			{
-				if (j == 0)
-					flags[i] = ft_calloc(sizeof(char), 10); // alterar tamanho
-				flags[i][j] = cmd[k + j];
-				cmd[k + j] = 'x';
-				j++;
+				if (token->j == 0)
+					token->flags[token->i] = ft_calloc(sizeof(char), 20);
+				token->flags[token->i][token->j] = cmd[token->k + token->j];
+				cmd[token->k + token->j] = 'x';
+				token->j++;
 			}
-			if (cmd[k + j] != '\'')
-				ft_printf("missing end of quoting");
-			i++;
-			k += j;
+			token->i++;
+			token->k += token->j;
 		}
-		k++;
+		token->k++;
 	}
-	flags[i] = '\0';
-	i = 0;
-	k = 0;
-	cmd_parsed = ft_split(cmd, ' ');
-	while (cmd_parsed[i])
+	token->flags[token->i] = '\0';
+	return (cmd);
+}
+
+void revert_token(t_token *token)
+{
+	token->i = 0;
+	token->k = 0;
+	token->cmd_parsed = ft_calloc(sizeof(char *), 5);
+	while (token->splited_cmd[token->i])
 	{
-		if (cmd_parsed[i][0] == '\'')
+		if (token->splited_cmd[token->i][0] == '\'')
 		{
-			j = 1;
-			while (cmd_parsed[i][j] == 'x')
+			token->cmd_parsed[token->i] = ft_calloc(ft_strlen(token->splited_cmd[token->i]), sizeof(char));
+			token->j = 1;
+			while (token->splited_cmd[token->i][token->j] == 'x')
 			{
-				cmd_parsed[i][j] = flags[k][j - 1];
-				j++;
-				if (cmd_parsed[i][j] == '\'')
-					k++;
+				token->cmd_parsed[token->i][token->j - 1] = token->flags[token->k][token->j - 1];
+				token->j++;
+				if (token->splited_cmd[token->i][token->j] == '\'')
+					token->k++;
 			}
-			if (cmd_parsed[i][1] == '{' && cmd_parsed[i][j - 1] == '}')
+			if (token->cmd_parsed[token->i][1] == '{' && token->cmd_parsed[token->i][token->j - 1] == '}')
 			{
-				cmd_parsed[i][0] = ' ';
-				cmd_parsed[i][j] = ' ';
+				token->cmd_parsed[token->i][0] = ' ';
+				token->cmd_parsed[token->i][token->j] = ' ';
 			}
 		}
-		i++;
+		else
+			token->cmd_parsed[token->i] = ft_strdup(token->splited_cmd[token->i]);
+		token->i++;
 	}
-	return (cmd_parsed);
+	free_mem(token->splited_cmd);
 }
 
 char *find_path(char *cmd, char **env)
@@ -101,45 +114,6 @@ char *find_path(char *cmd, char **env)
 	free_mem(paths);
 	return (cmd);
 }
-
-// char *swap_space_arg(char *command, char *what_change, char *to_swap)
-// {
-// 	int c;
-// 	int w;
-// 	int aux;
-
-// 	c = 0;
-// 	w = 0;
-// 	aux = 0;
-// 	while (command[c] != '\0')
-// 	{
-// 		while (command[c + w] == what_change[w])
-// 		{
-// 			command[c + w] = to_swap[aux];
-// 			w++;
-// 			aux++;
-// 		}
-// 		c++;
-// 	}
-// 	return (command);
-// }
-
-// char **replace_in_matriz(char **matriz, char *what_change, char *to_swap)
-// {
-// 	int i;
-
-// 	i = 1;
-// 	while (matriz[i])
-// 	{
-// 		if (ft_strnstr(matriz[i], what_change, ft_strlen(matriz[i])))
-// 		{
-// 			free(matriz[i]);
-// 			matriz[i] = ft_strdup(to_swap);
-// 		}
-// 		i++;
-// 	}
-// 	return (matriz);
-// }
 
 void free_mem(char **mem)
 {

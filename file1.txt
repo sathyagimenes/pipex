@@ -1,5 +1,9 @@
 to-do-list
 
+arrumar memory leak da tokenização
+entender pq isso quebra: valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --track-fds=yes ./pipex file1.txt "cat" "trrrrrx ' ' 'x'" outfile2
+segundo comando errado está quebrando
+
 procura aspas simples ou duplas, 
 guarda token (comando) e substitui por algo x
 dá o split dos comandos
