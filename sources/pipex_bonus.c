@@ -1,27 +1,39 @@
-// colocar header
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex_bonus.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sde-cama <sde-cama@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/06 00:09:25 by sde-cama          #+#    #+#             */
+/*   Updated: 2023/01/06 01:34:08 by sde-cama         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "pipex.h"
 
-static int		open_file(char *file, int in_or_out);
+static int	open_file(char *file, int in_or_out);
 static void	here_doc(char **av);
 static void	here_doc_put_in(char **av, int *p_fd);
 static void	do_pipe(char *cmd, char **env);
 static void	exec(char *cmd, char **env);
 
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
 	int		i;
 	int		fd_in;
 	int		fd_out;
 
+	fd_in = 0;
 	if (argc < 5)
 		error_msg("Incorrect arguments. Run in following format: ./pipex_bonus "
-				"file_in \"cmd flags\" \"cmd flags\" file_out", 1);	
-	if (ft_strncmp(argv[1], "here_doc", ft_strlen(argv[1])) == 0 && ft_strlen(argv[1]) == 8)
+			"file_in \"cmd flags\" \"cmd flags\" file_out", 1);
+	if (ft_strncmp(argv[1], "here_doc", ft_strlen(argv[1]))
+		== 0 && ft_strlen(argv[1]) == 8)
 	{
 		if (argc < 6)
-			error_msg("Incorrect arguments. Run in following format: ./pipex_bonus "
-				"here_doc limitter \"cmd flags\" \"cmd flags\" file_out", 1);	
+			error_msg("Incorrect args. Run in following format: ./pipex_bonus"
+				" here_doc limitter \"cmd flags\" \"cmd flags\" file_out", 1);
 		i = 3;
 		fd_out = open_file(argv[argc - 1], 2);
 		here_doc(argv);
@@ -39,12 +51,12 @@ int main(int argc, char **argv, char **envp)
 		do_pipe(argv[i++], envp);
 	dup2(fd_out, 1);
 	exec(argv[argc - 2], envp);
-	return(0);
+	return (0);
 }
 
-static int open_file(char *file, int in_or_out)
+static int	open_file(char *file, int in_or_out)
 {
-	int ret;
+	int	ret;
 
 	if (in_or_out == 0)
 		ret = open(file, O_RDONLY);
@@ -57,10 +69,10 @@ static int open_file(char *file, int in_or_out)
 	return (ret);
 }
 
-static void here_doc(char **av)
+static void	here_doc(char **av)
 {
-	int p_fd[2];
-	pid_t pid;
+	int		p_fd[2];
+	pid_t	pid;
 
 	if (pipe(p_fd) == -1)
 		error_msg("Pipe fail. Could not pipe files.", 1);
@@ -77,9 +89,9 @@ static void here_doc(char **av)
 	}
 }
 
-static void here_doc_put_in(char **av, int *p_fd)
+static void	here_doc_put_in(char **av, int *p_fd)
 {
-	char *ret;
+	char	*ret;
 
 	close(p_fd[0]);
 	while (1)
@@ -95,10 +107,10 @@ static void here_doc_put_in(char **av, int *p_fd)
 	}
 }
 
-static void do_pipe(char *cmd, char **env)
+static void	do_pipe(char *cmd, char **env)
 {
-	pid_t pid;
-	int p_fd[2];
+	pid_t	pid;
+	int		p_fd[2];
 
 	if (pipe(p_fd) == -1)
 		error_msg("Pipe fail. Could not pipe files.", 1);
@@ -118,17 +130,12 @@ static void do_pipe(char *cmd, char **env)
 	}
 }
 
-static void exec(char *cmd, char **env)
+static void	exec(char *cmd, char **env)
 {
-	char **s_cmd;
-	char *path;
+	char	**s_cmd;
+	char	*path;
 
-	if (ft_strnstr(cmd, " ' '", ft_strlen(cmd)))
-		cmd = swap_space_arg(cmd, " ' '", " 0x0");
-	s_cmd = ft_split(cmd, ' ');
-	if (s_cmd == NULL)
-		error_msg(strerror(errno), 1);
-	s_cmd = replace_in_matriz(s_cmd, "0x0", "  ");
+	s_cmd = split_cmd(cmd);
 	path = find_path(s_cmd[0], env);
 	if (execve(path, s_cmd, env) == -1)
 	{

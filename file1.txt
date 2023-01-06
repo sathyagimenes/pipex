@@ -20,6 +20,7 @@ para o awk eu preciso retirar as aspas
 Esse funciona: ./pipex file1.txt "cat" "awk {print\$1}" outfile
 
 valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --track-fds=yes ./pipex file1.txt "cat" "wc -w" out
+valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes ./pipex file1.txt "cat" "wc -w" out
 
 Checar:
 - The program takes 4 arguments, no more, no less (except for bonus part)

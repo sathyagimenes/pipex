@@ -32,7 +32,7 @@ ${LIB}:
 			make -C libft
 
 run:	$(NAME)
-		./pipex file1.txt "ls -l" "wc -l" outfile
+		./pipex file1.txt "cat" "wc -w" outfile
 
 $(BONUS_NAME):	${LIB} ${BONUS_OBJS}
 				$(CC) $(CFLAGS) $(BONUS_OBJS) -o $@ -L $(LIBFT_PATH) -I $(INCLUDES_PATH) -I $(LIBFT_PATH) -lft

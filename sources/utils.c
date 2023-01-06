@@ -1,13 +1,23 @@
-// colocar header
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sde-cama <sde-cama@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/06 00:05:34 by sde-cama          #+#    #+#             */
+/*   Updated: 2023/01/06 01:17:49 by sde-cama         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "pipex.h"
 
-char *tokenization(char *cmd, t_token *token);
-void revert_token(t_token *token);
+char	*tokenization(char *cmd, t_token *token);
+void	revert_token(t_token *token);
 
-char **split_cmd(char *cmd)
+char	**split_cmd(char *cmd)
 {
-	t_token token;
+	t_token	token;
 
 	cmd = tokenization(cmd, &token);
 	token.splited_cmd = ft_split(cmd, ' ');
@@ -15,10 +25,10 @@ char **split_cmd(char *cmd)
 		error_msg(strerror(errno), 1);
 	revert_token(&token);
 	free_mem(token.flags);
-	return (token.cmd_parsed);
+	return (token.undo_t);
 }
 
-char *tokenization(char *cmd, t_token *token)
+char	*tokenization(char *cmd, t_token *token)
 {
 	token->i = 0;
 	token->k = 0;
@@ -42,48 +52,50 @@ char *tokenization(char *cmd, t_token *token)
 		}
 		token->k++;
 	}
-	token->flags[token->i] = '\0';
 	return (cmd);
 }
 
-void revert_token(t_token *token)
+void	revert_token(t_token *token)
 {
 	token->i = 0;
 	token->k = 0;
-	token->cmd_parsed = ft_calloc(sizeof(char *), 5);
+	token->undo_t = ft_calloc(sizeof(char *), 5);
 	while (token->splited_cmd[token->i])
 	{
 		if (token->splited_cmd[token->i][0] == '\'')
 		{
-			token->cmd_parsed[token->i] = ft_calloc(ft_strlen(token->splited_cmd[token->i]), sizeof(char));
+			token->undo_t[token->i] = ft_calloc(ft_strlen
+					(token->splited_cmd[token->i]), sizeof(char));
 			token->j = 1;
 			while (token->splited_cmd[token->i][token->j] == 'x')
 			{
-				token->cmd_parsed[token->i][token->j - 1] = token->flags[token->k][token->j - 1];
+				token->undo_t[token->i][token->j - 1]
+					= token->flags[token->k][token->j - 1];
 				token->j++;
 				if (token->splited_cmd[token->i][token->j] == '\'')
 					token->k++;
 			}
-			if (token->cmd_parsed[token->i][1] == '{' && token->cmd_parsed[token->i][token->j - 1] == '}')
+			if (token->undo_t[token->i][1] == '{' &&
+				token->undo_t[token->i][token->j - 1] == '}')
 			{
-				token->cmd_parsed[token->i][0] = ' ';
-				token->cmd_parsed[token->i][token->j] = ' ';
+				token->undo_t[token->i][0] = ' ';
+				token->undo_t[token->i][token->j] = ' ';
 			}
 		}
 		else
-			token->cmd_parsed[token->i] = ft_strdup(token->splited_cmd[token->i]);
+			token->undo_t[token->i] = ft_strdup(token->splited_cmd[token->i]);
 		token->i++;
 	}
 	free_mem(token->splited_cmd);
 }
 
-char *find_path(char *cmd, char **env)
+char	*find_path(char *cmd, char **env)
 {
-	char *env_path;
-	char **paths;
-	char *cmd_line;
-	char *full_path;
-	int i;
+	char	*env_path;
+	char	**paths;
+	char	*cmd_line;
+	char	*full_path;
+	int		i;
 
 	if (cmd[0] == '/' || cmd[0] == '.')
 		return (cmd);
@@ -115,9 +127,9 @@ char *find_path(char *cmd, char **env)
 	return (cmd);
 }
 
-void free_mem(char **mem)
+void	free_mem(char **mem)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (mem[i])
